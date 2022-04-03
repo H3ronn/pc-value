@@ -50,7 +50,7 @@ const Form = ({ values, onChange, onSubmit }) => {
       <input
         name="price"
         id="price"
-        type="text"
+        type="number"
         value={values.price}
         onChange={onChange}
       />

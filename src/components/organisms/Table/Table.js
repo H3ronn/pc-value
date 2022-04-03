@@ -5,10 +5,24 @@ const TableWrapper = styled.div`
   margin: 0 30px;
 `;
 
+const StyledTable = styled.table`
+  border-collapse: collapse;
+
+  thead th {
+    border-bottom: 2px solid #dee2e6;
+  }
+
+  th,
+  td {
+    border-top: 1px solid #dee2e6;
+    padding: 12px;
+  }
+`;
+
 const Table = ({ data }) => {
   return (
     <TableWrapper>
-      <table>
+      <StyledTable>
         <thead>
           <tr>
             <th>ID</th>
@@ -29,7 +43,7 @@ const Table = ({ data }) => {
             ))} */}
           {data.map(({ id, name, description, category, price, currency }) => (
             <tr>
-              <td>{id}</td>
+              <th>{id}</th>
               <td>{name}</td>
               <td>{description}</td>
               <td>{category}</td>
@@ -38,7 +52,7 @@ const Table = ({ data }) => {
             </tr>
           ))}
         </tbody>
-      </table>
+      </StyledTable>
     </TableWrapper>
   );
 };

@@ -1,12 +1,17 @@
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useReducer, useState } from 'react';
 import styled from 'styled-components';
 import Form from 'components/organisms/Form/Form';
 import Table from 'components/organisms/Table/Table';
 
 const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  justify-content: center;
   margin: 0 auto;
+  gap: 20px;
+
+  p {
+    text-align: center;
+  }
 `;
 
 const initFormValues = {
@@ -14,12 +19,11 @@ const initFormValues = {
   name: 'procesor',
   description: 'intel core i5-10400f',
   category: '',
-  price: '1000',
+  price: 1000,
   currency: 'zl',
 };
 
 const reducer = (state, element) => {
-  console.log(state.length);
   return { ...state, [element.name]: element.value };
 };
 
@@ -40,9 +44,21 @@ const App = () => {
     dispatch({ name: e.target.name, value: e.target.value });
   };
 
-  useEffect(() => {
-    console.log(state);
-  }, [state]);
+  const getTotalValue = () => {
+    const total = state.reduce(
+      (acc, item) => ({
+        ...acc,
+        [item.currency]: acc[item.currency] + parseInt(item.price),
+      }),
+      { zl: 0, euro: 0, dollar: 0 }
+    );
+
+    return `Total value: ${total.zl}zl, ${total.euro}euro, ${total.dollar}$`;
+  };
+
+  // useEffect(() => {
+  //   console.log(state);
+  // }, [state]);
 
   return (
     <Wrapper>
@@ -51,6 +67,7 @@ const App = () => {
         onChange={handleInputChange}
         onSubmit={handleAddItem}
       />
+      <p>{getTotalValue()}</p>
       <Table data={state} />
     </Wrapper>
   );
