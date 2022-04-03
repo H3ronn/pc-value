@@ -62,6 +62,8 @@ const App = () => {
     return `Total value: ${total.zl}zl, ${total.euro}euro, ${total.dollar}$`;
   };
 
+  const getPositionsAmount = () => state.length;
+
   // useEffect(() => {
   //   console.log(state);
   // }, [state]);
@@ -70,6 +72,7 @@ const App = () => {
     <Wrapper>
       <Form values={formValues} onChange={handleInputChange} onSubmit={addItem} />
       <p>{getTotalValue()}</p>
+      <p>Positions amount:{getPositionsAmount()}</p>
       <Table data={state} deleteItem={deleteItem} />
     </Wrapper>
   );

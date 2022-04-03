@@ -44,7 +44,7 @@ const Table = ({ data, deleteItem }) => {
               </tr>
             ))} */}
           {data.map(({ id, name, description, category, price, currency }, index) => (
-            <tr key={index}>
+            <tr key={id}>
               <th>{index + 1}</th>
               <td>{name}</td>
               <td>{description}</td>
