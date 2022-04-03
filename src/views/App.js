@@ -10,6 +10,7 @@ const Wrapper = styled.div`
 `;
 
 const initFormValues = {
+  id: 1,
   name: 'procesor',
   description: 'intel core i5-10400f',
   category: '',
@@ -18,6 +19,7 @@ const initFormValues = {
 };
 
 const reducer = (state, element) => {
+  console.log(state.length);
   return { ...state, [element.name]: element.value };
 };
 
@@ -28,16 +30,19 @@ const App = () => {
   const handleAddItem = (e) => {
     e.preventDefault();
 
-    setState((prevState) => [...prevState, formValues]);
+    setState((prevState) => [
+      ...prevState,
+      { ...formValues, id: prevState.length + 1 },
+    ]);
   };
 
   const handleInputChange = (e) => {
     dispatch({ name: e.target.name, value: e.target.value });
   };
 
-  // useEffect(() => {
-  //   console.log(formValues);
-  // }, [formValues]);
+  useEffect(() => {
+    console.log(state);
+  }, [state]);
 
   return (
     <Wrapper>

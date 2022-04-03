@@ -11,6 +11,7 @@ const Table = ({ data }) => {
       <table>
         <thead>
           <tr>
+            <th>ID</th>
             <th>Name</th>
             <th>Description</th>
             <th>Category</th>
@@ -26,8 +27,9 @@ const Table = ({ data }) => {
                 ))}
               </tr>
             ))} */}
-          {data.map(({ name, description, category, price, currency }) => (
+          {data.map(({ id, name, description, category, price, currency }) => (
             <tr>
+              <td>{id}</td>
               <td>{name}</td>
               <td>{description}</td>
               <td>{category}</td>
