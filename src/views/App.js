@@ -2,6 +2,7 @@ import React, { useEffect, useReducer, useState } from 'react';
 import styled from 'styled-components';
 import Form from 'components/organisms/Form/Form';
 import Table from 'components/organisms/Table/Table';
+import { getRandomId } from 'helpers/getRandomId';
 
 const Wrapper = styled.div`
   display: grid;
@@ -34,13 +35,11 @@ const App = () => {
   const addItem = (e) => {
     e.preventDefault();
 
-    setState((prevState) => [...prevState, { ...formValues, id: prevState.length + 1 }]);
+    setState((prevState) => [...prevState, { ...formValues, id: getRandomId() }]);
   };
 
   const deleteItem = (id) => {
-    setState((prevState) => {
-      return prevState.filter((item) => item.id !== id);
-    });
+    setState((prevState) => prevState.filter((item) => item.id !== id));
   };
 
   useEffect(() => {
