@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import styled from 'styled-components';
 import Form from 'components/organisms/Form/Form';
 import Table from 'components/organisms/Table/Table';
@@ -16,7 +16,7 @@ const Wrapper = styled.div`
 
 const initFormValues = {
   id: 1,
-  name: 'procesor',
+  name: 'processor',
   description: 'intel core i5-10400f',
   category: '',
   price: 1000,
@@ -31,14 +31,21 @@ const App = () => {
   const [formValues, dispatch] = useReducer(reducer, initFormValues);
   const [state, setState] = useState([]);
 
-  const handleAddItem = (e) => {
+  const addItem = (e) => {
     e.preventDefault();
 
-    setState((prevState) => [
-      ...prevState,
-      { ...formValues, id: prevState.length + 1 },
-    ]);
+    setState((prevState) => [...prevState, { ...formValues, id: prevState.length + 1 }]);
   };
+
+  const deleteItem = (id) => {
+    setState((prevState) => {
+      return prevState.filter((item) => item.id !== id);
+    });
+  };
+
+  useEffect(() => {
+    console.log(state);
+  }, [state]);
 
   const handleInputChange = (e) => {
     dispatch({ name: e.target.name, value: e.target.value });
@@ -62,13 +69,9 @@ const App = () => {
 
   return (
     <Wrapper>
-      <Form
-        values={formValues}
-        onChange={handleInputChange}
-        onSubmit={handleAddItem}
-      />
+      <Form values={formValues} onChange={handleInputChange} onSubmit={addItem} />
       <p>{getTotalValue()}</p>
-      <Table data={state} />
+      <Table data={state} deleteItem={deleteItem} />
     </Wrapper>
   );
 };

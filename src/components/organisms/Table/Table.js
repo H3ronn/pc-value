@@ -19,18 +19,20 @@ const StyledTable = styled.table`
   }
 `;
 
-const Table = ({ data }) => {
+const Table = ({ data, deleteItem }) => {
   return (
     <TableWrapper>
       <StyledTable>
         <thead>
           <tr>
-            <th>ID</th>
+            <th></th>
             <th>Name</th>
             <th>Description</th>
             <th>Category</th>
             <th>Price</th>
             <th>Currency</th>
+            <th></th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -41,14 +43,18 @@ const Table = ({ data }) => {
                 ))}
               </tr>
             ))} */}
-          {data.map(({ id, name, description, category, price, currency }) => (
-            <tr>
-              <th>{id}</th>
+          {data.map(({ id, name, description, category, price, currency }, index) => (
+            <tr key={index}>
+              <th>{index + 1}</th>
               <td>{name}</td>
               <td>{description}</td>
               <td>{category}</td>
               <td>{price}</td>
               <td>{currency}</td>
+              <td>
+                <button onClick={() => deleteItem(id)}>Delete</button>
+                <button onClick={() => deleteItem(id)}>Edit</button>
+              </td>
             </tr>
           ))}
         </tbody>

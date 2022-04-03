@@ -16,21 +16,9 @@ const Form = ({ values, onChange, onSubmit }) => {
   return (
     <StyledForm>
       <label htmlFor="name">Name</label>
-      <input
-        name="name"
-        id="name"
-        type="text"
-        value={values.name}
-        onChange={onChange}
-      />
+      <input name="name" id="name" type="text" value={values.name} onChange={onChange} />
       <label htmlFor="description">Description</label>
-      <input
-        name="description"
-        id="description"
-        type="text"
-        value={values.description}
-        onChange={onChange}
-      />
+      <input name="description" id="description" type="text" value={values.description} onChange={onChange} />
       <label htmlFor="category">Choose category</label>
       <select name="category" defaultValue="" onChange={onChange}>
         <option value="" disabled hidden>
@@ -47,13 +35,7 @@ const Form = ({ values, onChange, onSubmit }) => {
         </option>
       </select>
       <label htmlFor="price">Price</label>
-      <input
-        name="price"
-        id="price"
-        type="number"
-        value={values.price}
-        onChange={onChange}
-      />
+      <input name="price" id="price" type="number" value={values.price} onChange={onChange} />
       <fieldset onChange={onChange}>
         <legend htmlFor="currency">Currency</legend>
         <label>
