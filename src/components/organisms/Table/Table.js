@@ -53,7 +53,7 @@ const Table = ({ data, deleteItem }) => {
               <td>{currency}</td>
               <td>
                 <button onClick={() => deleteItem(id)}>Delete</button>
-                <button onClick={() => deleteItem(id)}>Edit</button>
+                <button onClick={() => console.log('edit soon')}>Edit</button>
               </td>
             </tr>
           ))}

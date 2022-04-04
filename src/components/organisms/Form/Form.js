@@ -1,4 +1,5 @@
 import React from 'react';
+import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 
 const StyledForm = styled.form`
@@ -13,14 +14,27 @@ const StyledForm = styled.form`
 `;
 
 const Form = ({ values, onChange, onSubmit }) => {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
+
+  const handleFormSubmit = (value) => {
+    onSubmit(value);
+    reset();
+  };
+
   return (
-    <StyledForm>
+    <StyledForm onSubmit={handleSubmit(handleFormSubmit)}>
       <label htmlFor="name">Name</label>
-      <input name="name" id="name" type="text" value={values.name} onChange={onChange} />
+      <input {...register('name', { required: true })} id="name" type="text" />
+      {errors.name ? <span>Name is required</span> : null}
       <label htmlFor="description">Description</label>
-      <input name="description" id="description" type="text" value={values.description} onChange={onChange} />
+      <input {...register('description')} id="description" type="text" />
       <label htmlFor="category">Choose category</label>
-      <select name="category" defaultValue="" onChange={onChange}>
+      <select {...register('category', { required: true })} defaultValue="">
         <option value="" disabled hidden>
           Categories
         </option>
@@ -34,24 +48,27 @@ const Form = ({ values, onChange, onSubmit }) => {
           software
         </option>
       </select>
+      {errors.category ? <span>Select category or add your own</span> : null}
       <label htmlFor="price">Price</label>
-      <input name="price" id="price" type="number" value={values.price} onChange={onChange} />
-      <fieldset onChange={onChange}>
+      <input {...register('price', { required: true })} id="price" type="number" step="any" />
+      {errors.price ? <span>Price is required</span> : null}
+      <fieldset>
         <legend htmlFor="currency">Currency</legend>
         <label>
           dollar
-          <input name="currency" id="currency" type="radio" value="dollar" />
+          <input {...register('currency', { required: true })} id="currency" type="radio" value="dollar" />
         </label>
         <label>
           euro
-          <input name="currency" id="currency" type="radio" value="euro" />
+          <input {...register('currency', { required: true })} id="currency" type="radio" value="euro" />
         </label>
         <label>
           zl
-          <input name="currency" id="currency" type="radio" value="zl" />
+          <input {...register('currency', { required: true })} id="currency" type="radio" value="zl" />
         </label>
       </fieldset>
-      <button onClick={onSubmit}>Add</button>
+      {errors.currency ? <span>Select currency!</span> : null}
+      <button>Add</button>
     </StyledForm>
   );
 };
