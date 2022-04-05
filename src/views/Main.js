@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Form from 'components/organisms/Form/Form';
 import Table from 'components/organisms/Table/Table';
 import { getRandomId } from 'helpers/getRandomId';
+import { useLocalStorage } from 'hooks/useLocalStorage';
 
 const Wrapper = styled.div`
   display: grid;
@@ -17,7 +18,7 @@ const Wrapper = styled.div`
 const Informations = styled.div``;
 
 const Main = () => {
-  const [state, setState] = useState([]);
+  const [state, setState] = useLocalStorage('state', []);
 
   const addItem = (values) => {
     setState((prevState) => [...prevState, { ...values, id: getRandomId() }]);
@@ -41,16 +42,12 @@ const Main = () => {
 
   const getPositionsAmount = () => state.length;
 
-  // useEffect(() => {
-  //   console.log(state);
-  // }, [state]);
-
   return (
     <Wrapper>
       <Form onSubmit={addItem} />
       <Informations>
         <p>{getTotalValue()}</p>
-        <p>Positions amount:{getPositionsAmount()}</p>
+        <p>Positions amount: {getPositionsAmount()}</p>
       </Informations>
       <Table data={state} deleteItem={deleteItem} />
     </Wrapper>

@@ -35,8 +35,6 @@ const Form = ({ values, onChange, onSubmit }) => {
     reset();
   };
 
-  console.log(watch());
-
   return (
     <StyledForm autoComplete="off" onSubmit={handleSubmit(handleFormSubmit)}>
       <InputField
