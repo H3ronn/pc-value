@@ -8,6 +8,7 @@ const GlobalStyle = createGlobalStyle`
 
   *, *::before, *::after {
     box-sizing: inherit;
+
   }
 
   body {
@@ -19,6 +20,9 @@ const GlobalStyle = createGlobalStyle`
 
   a, button {
     font-family: 'Montserrat', sans-serif;
+    &:focus {
+      outline: 1px solid black;
+    }
   }
 
 `;

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 const Button = styled(MDBBtn)`
   min-width: 100px;
   max-width: 200px;
-  margin: 10px auto;
+  margin: 10px auto 0;
 
   &:focus {
     outline: 4px red solid;

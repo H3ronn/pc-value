@@ -5,8 +5,8 @@ const Modal = ({ isOpen, setIsOpen, children }) => {
   const toggleShow = () => setIsOpen(!isOpen);
 
   return (
-    <MDBModal show={isOpen} setShow={setIsOpen} tabIndex="-1">
-      <MDBModalDialog centered>
+    <MDBModal show={isOpen} setShow={setIsOpen}>
+      <MDBModalDialog centered size="lg">
         <MDBModalContent>
           <MDBModalHeader>
             <MDBModalTitle>Add Category</MDBModalTitle>

@@ -82,7 +82,7 @@ const Form = ({ values, onChange, onSubmit }) => {
         />
 
         <Fieldset legend="Currency" error={errors.currency ? <span>Select currency!</span> : null}>
-          <Radio {...register('currency', { required: true })} label="dollar" value="dollar" />
+          <Radio {...register('currency', { required: true })} label="dollar" value="dollar" defaultChecked />
           <Radio {...register('currency', { required: true })} label="euro" value="euro" />
           <Radio {...register('currency', { required: true })} label="zloty" value="zloty" />
         </Fieldset>
