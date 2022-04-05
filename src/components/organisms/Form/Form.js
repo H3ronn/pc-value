@@ -1,3 +1,7 @@
+import Radio from 'components/atoms/Radio/Radio';
+import Fieldset from 'components/molecules/Fieldset/Fieldset';
+import InputField from 'components/molecules/InputField/InputField';
+import SelectField from 'components/molecules/Select/Select';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
@@ -8,16 +12,20 @@ const StyledForm = styled.form`
   width: 50vw;
   margin: 0 auto;
   align-items: center;
-  label {
-    margin-top: 10px;
-  }
 `;
+
+const categories = [
+  { value: 'components', label: 'Computer Components' },
+  { value: 'peripherals', label: 'Peripherals' },
+  { value: 'software', label: 'Software' },
+];
 
 const Form = ({ values, onChange, onSubmit }) => {
   const {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors },
   } = useForm();
 
@@ -26,48 +34,52 @@ const Form = ({ values, onChange, onSubmit }) => {
     reset();
   };
 
+  console.log(watch());
+
   return (
-    <StyledForm onSubmit={handleSubmit(handleFormSubmit)}>
-      <label htmlFor="name">Name</label>
-      <input {...register('name', { required: true })} id="name" type="text" />
-      {errors.name ? <span>Name is required</span> : null}
-      <label htmlFor="description">Description</label>
-      <input {...register('description')} id="description" type="text" />
-      <label htmlFor="category">Choose category</label>
-      <select {...register('category', { required: true })} defaultValue="">
+    <StyledForm autoComplete="off" onSubmit={handleSubmit(handleFormSubmit)}>
+      <InputField
+        {...register('name', { required: true })}
+        id="name"
+        type="text"
+        label="Name"
+        placeholder="e.g processor"
+        error={errors.name ? 'Name is required' : null}
+      />
+
+      <InputField {...register('description')} id="description" type="text" label="Description" placeholder="e.g i5 10300f" />
+
+      <SelectField
+        {...register('category', { required: true })}
+        id="category"
+        label="Choose category"
+        error={errors.category ? 'Select category or add your own' : null}
+      >
         <option value="" disabled hidden>
           Categories
         </option>
-        <option id="components" value="components">
-          computer components
-        </option>
-        <option id="peripherals" value="peripherals">
-          peripherals
-        </option>
-        <option id="software" value="software">
-          software
-        </option>
-      </select>
-      {errors.category ? <span>Select category or add your own</span> : null}
-      <label htmlFor="price">Price</label>
-      <input {...register('price', { required: true })} id="price" type="number" step="any" />
-      {errors.price ? <span>Price is required</span> : null}
-      <fieldset>
-        <legend htmlFor="currency">Currency</legend>
-        <label>
-          dollar
-          <input {...register('currency', { required: true })} id="currency" type="radio" value="dollar" />
-        </label>
-        <label>
-          euro
-          <input {...register('currency', { required: true })} id="currency" type="radio" value="euro" />
-        </label>
-        <label>
-          zl
-          <input {...register('currency', { required: true })} id="currency" type="radio" value="zl" />
-        </label>
-      </fieldset>
-      {errors.currency ? <span>Select currency!</span> : null}
+        {categories.map(({ value, label }) => (
+          <option key={value} value={value}>
+            {label}
+          </option>
+        ))}
+      </SelectField>
+
+      <InputField
+        {...register('price', { required: true })}
+        id="price"
+        type="number"
+        step="any"
+        label="Price"
+        error={errors.price ? 'Price is required' : null}
+      />
+
+      <Fieldset legend="Currency" error={errors.currency ? <span>Select currency!</span> : null}>
+        <Radio {...register('currency', { required: true })} label="dollar" value="dollar" />
+        <Radio {...register('currency', { required: true })} label="euro" value="euro" />
+        <Radio {...register('currency', { required: true })} label="zloty" value="zloty" />
+      </Fieldset>
+
       <button>Add</button>
     </StyledForm>
   );
