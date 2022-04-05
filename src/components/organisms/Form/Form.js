@@ -26,7 +26,6 @@ const Form = ({ values, onChange, onSubmit }) => {
     register,
     handleSubmit,
     reset,
-    watch,
     formState: { errors },
   } = useForm();
 

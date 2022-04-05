@@ -4,6 +4,7 @@ import Form from 'components/organisms/Form/Form';
 import Table from 'components/organisms/Table/Table';
 import { getRandomId } from 'helpers/getRandomId';
 import { useLocalStorage } from 'hooks/useLocalStorage';
+import { formatFloat } from 'helpers/formatFloat';
 
 const Wrapper = styled.div`
   display: grid;
@@ -32,7 +33,7 @@ const Main = () => {
     const total = state.reduce(
       (acc, item) => ({
         ...acc,
-        [item.currency]: acc[item.currency] + parseInt(item.price),
+        [item.currency]: formatFloat(acc[item.currency] + parseFloat(item.price)),
       }),
       { zloty: 0, euro: 0, dollar: 0 }
     );
@@ -41,6 +42,22 @@ const Main = () => {
   };
 
   const getPositionsAmount = () => state.length;
+
+  const getValuesByCategory = () => {
+    const result = state.reduce(
+      (acc, { category, currency, price }) => ({
+        ...acc,
+        [category]: { ...acc[category], [currency]: acc[category][currency] + parseFloat(price) },
+      }),
+      {
+        components: { euro: 0, dollar: 0, zloty: 0 },
+        peripherals: { euro: 0, dollar: 0, zloty: 0 },
+        software: { euro: 0, dollar: 0, zloty: 0 },
+      }
+    );
+
+    return result;
+  };
 
   return (
     <Wrapper>
