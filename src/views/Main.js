@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import Form from 'components/organisms/Form/Form';
 import Table from 'components/organisms/Table/Table';
 import { getRandomId } from 'helpers/getRandomId';
 import { useLocalStorage } from 'hooks/useLocalStorage';
 import { formatFloat } from 'helpers/formatFloat';
+import CategoryForm from 'components/organisms/CategoryForm/CategoryForm';
 
 const Wrapper = styled.div`
   display: grid;
@@ -62,6 +63,7 @@ const Main = () => {
   return (
     <Wrapper>
       <Form onSubmit={addItem} />
+      <CategoryForm />
       <Informations>
         <p>{getTotalValue()}</p>
         <p>Positions amount: {getPositionsAmount()}</p>

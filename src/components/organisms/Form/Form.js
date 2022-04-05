@@ -2,6 +2,9 @@ import Radio from 'components/atoms/Radio/Radio';
 import Fieldset from 'components/molecules/Fieldset/Fieldset';
 import InputField from 'components/molecules/InputField/InputField';
 import SelectField from 'components/molecules/Select/Select';
+import { initialCategories } from 'data/initialCategories';
+import { useCategory } from 'hooks/useCategory';
+import { useLocalStorage } from 'hooks/useLocalStorage';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
@@ -15,13 +18,8 @@ const StyledForm = styled.form`
   max-width: 500px;
 `;
 
-const categories = [
-  { value: 'components', label: 'Computer Components' },
-  { value: 'peripherals', label: 'Peripherals' },
-  { value: 'software', label: 'Software' },
-];
-
 const Form = ({ values, onChange, onSubmit }) => {
+  const { categories } = useCategory();
   const {
     register,
     handleSubmit,
@@ -56,19 +54,20 @@ const Form = ({ values, onChange, onSubmit }) => {
         <option value="" disabled hidden>
           Categories
         </option>
-        {categories.map(({ value, label }) => (
-          <option key={value} value={value}>
-            {label}
+        {categories.map((category) => (
+          <option key={category} value={category}>
+            {category}
           </option>
         ))}
       </SelectField>
 
       <InputField
-        {...register('price', { required: true })}
+        {...register('price', { required: true, min: 0 })}
         id="price"
         type="number"
         step="any"
         label="Price"
+        min="0"
         error={errors.price ? 'Price is required' : null}
       />
 
