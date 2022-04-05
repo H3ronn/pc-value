@@ -11,7 +11,8 @@ const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    font-family: 'Montserrat', sans-serif;
+    /* font-family: 'Montserrat', sans-serif; */
+    font-family: Roboto, Helvetica, Arial, sans-serif;
     margin: 0;
     padding: 0;
   }
@@ -19,6 +20,7 @@ const GlobalStyle = createGlobalStyle`
   a, button {
     font-family: 'Montserrat', sans-serif;
   }
+
 `;
 
 export default GlobalStyle;

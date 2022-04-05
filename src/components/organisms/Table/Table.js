@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from 'components/atoms/Button/Button';
 import styled from 'styled-components';
 
 const TableWrapper = styled.div`
@@ -58,8 +59,8 @@ const Table = ({ data, deleteItem }) => {
               <td>{price}</td>
               <td>{currency}</td>
               <td>
-                <button onClick={() => deleteItem(id)}>Delete</button>
-                <button onClick={() => console.log('edit soon')}>Edit</button>
+                <Button onClick={() => deleteItem(id)}>Delete</Button>
+                <Button onClick={() => console.log('edit soon')}>Edit</Button>
               </td>
             </tr>
           ))}
