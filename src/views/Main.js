@@ -7,15 +7,14 @@ import { getRandomId } from 'helpers/getRandomId';
 const Wrapper = styled.div`
   display: grid;
   justify-content: center;
-  align-items: center;
-  align-self: center;
-  margin: 0 auto;
   gap: 20px;
 
   p {
     text-align: center;
   }
 `;
+
+const Informations = styled.div``;
 
 const Main = () => {
   const [state, setState] = useState([]);
@@ -49,8 +48,10 @@ const Main = () => {
   return (
     <Wrapper>
       <Form onSubmit={addItem} />
-      <p>{getTotalValue()}</p>
-      <p>Positions amount:{getPositionsAmount()}</p>
+      <Informations>
+        <p>{getTotalValue()}</p>
+        <p>Positions amount:{getPositionsAmount()}</p>
+      </Informations>
       <Table data={state} deleteItem={deleteItem} />
     </Wrapper>
   );

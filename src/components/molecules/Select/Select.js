@@ -5,7 +5,6 @@ import Label from 'components/atoms/Label/Label';
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 220px;
   /* align-items: center; */
   span {
     text-align: center;

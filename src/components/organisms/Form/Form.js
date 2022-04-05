@@ -9,9 +9,10 @@ import styled from 'styled-components';
 const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
-  width: 50vw;
   margin: 0 auto;
-  align-items: center;
+  width: 50vw;
+  min-width: 200px;
+  max-width: 500px;
 `;
 
 const categories = [

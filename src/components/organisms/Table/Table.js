@@ -2,11 +2,12 @@ import React from 'react';
 import styled from 'styled-components';
 
 const TableWrapper = styled.div`
-  margin: 0 30px;
+  overflow-x: auto;
 `;
 
 const StyledTable = styled.table`
   border-collapse: collapse;
+  max-width: 100vw;
 
   thead th {
     border-bottom: 2px solid #dee2e6;
@@ -17,6 +18,12 @@ const StyledTable = styled.table`
     border-top: 1px solid #dee2e6;
     padding: 12px;
   }
+
+  td {
+    min-width: 150px;
+    max-width: 30vw;
+    word-break: break-all;
+  }
 `;
 
 const Table = ({ data, deleteItem }) => {
@@ -25,14 +32,13 @@ const Table = ({ data, deleteItem }) => {
       <StyledTable>
         <thead>
           <tr>
-            <th></th>
+            <th>Ln</th>
             <th>Name</th>
             <th>Description</th>
             <th>Category</th>
             <th>Price</th>
             <th>Currency</th>
-            <th></th>
-            <th></th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
