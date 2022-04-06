@@ -7,8 +7,10 @@ import { useCategories } from 'hooks/useCategories';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 import Modal from 'components/organisms/Modal/Modal';
-import CategoryForm from '../CategoryForm/CategoriesForm';
+import CategoriesForm from '../CategoriesForm/CategoriesForm';
 import Button from 'components/atoms/Button/Button';
+import CurrenciesForm from '../CurrenciesForm/CurrenciesForm';
+import { useCurrencies } from 'hooks/useCurrencies';
 
 const StyledForm = styled.form`
   display: flex;
@@ -21,13 +23,20 @@ const StyledForm = styled.form`
 
 const Form = ({ values, onChange, onSubmit }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [modalContent, setModalContent] = useState('');
   const { inputCategories } = useCategories();
+  const { inputCurrencies } = useCurrencies();
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm();
+
+  const showModal = (content) => {
+    setIsOpen(true);
+    setModalContent(content);
+  };
 
   const handleFormSubmit = (value) => {
     onSubmit(value);
@@ -37,7 +46,7 @@ const Form = ({ values, onChange, onSubmit }) => {
   return (
     <>
       <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
-        <CategoryForm />
+        {modalContent === 'category' ? <CategoriesForm /> : <CurrenciesForm />}
       </Modal>
       <StyledForm autoComplete="off" onSubmit={handleSubmit(handleFormSubmit)}>
         <InputField
@@ -67,7 +76,7 @@ const Form = ({ values, onChange, onSubmit }) => {
           ))}
         </Select>
 
-        <Button type="button" onClick={() => setIsOpen(true)} rounded color="dark">
+        <Button type="button" onClick={() => showModal('category')} rounded color="dark">
           Add new category
         </Button>
 
@@ -82,12 +91,15 @@ const Form = ({ values, onChange, onSubmit }) => {
         />
 
         <Fieldset legend="Currency" error={errors.currency ? <span>Select currency!</span> : null}>
-          <Radio {...register('currency', { required: true })} label="dollar" value="dollar" defaultChecked />
-          <Radio {...register('currency', { required: true })} label="euro" value="euro" />
-          <Radio {...register('currency', { required: true })} label="zloty" value="zloty" />
+          {inputCurrencies.map((currency) => (
+            <Radio {...register('currency', { required: true })} label={currency} value={currency} key={currency} />
+          ))}
         </Fieldset>
-        <Button rounded color="dark">
-          Add
+        <Button type="button" onClick={() => showModal('currency')} rounded color="dark">
+          Add new currency
+        </Button>
+        <Button $center rounded color="dark">
+          Add item
         </Button>
       </StyledForm>
     </>
