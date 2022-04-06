@@ -9,7 +9,7 @@ const TableWrapper = styled.div`
 const StyledTable = styled.table`
   border-collapse: collapse;
   max-width: 100vw;
-
+  margin: 0 auto;
   thead th {
     border-bottom: 2px solid #dee2e6;
   }
