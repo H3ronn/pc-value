@@ -6,8 +6,8 @@ import { getRandomId } from 'helpers/getRandomId';
 import { useLocalStorage } from 'hooks/useLocalStorage';
 import { formatFloat } from 'helpers/formatFloat';
 import Modal from 'components/organisms/Modal/Modal';
-import { useCategories } from 'hooks/useCategories';
 import { MDBListGroup, MDBListGroupItem } from 'mdb-react-ui-kit';
+import useModal from 'hooks/useModal';
 
 const Wrapper = styled.div`
   display: grid;
@@ -31,9 +31,9 @@ const InformationLists = styled.div`
 `;
 
 const Main = () => {
-  const [isOpen, setIsOpen] = useState(false);
   const [state, setState] = useLocalStorage('state', []);
-  const { categories } = useCategories();
+  const { isOpen, handleOpenModal, handleCloseModal, setModalState } = useModal(false);
+  const [editingItem, setEditingItem] = useState({});
 
   const addItem = (values) => {
     setState((prevState) => [...prevState, { ...values, id: getRandomId() }]);
@@ -41,6 +41,18 @@ const Main = () => {
 
   const deleteItem = (id) => {
     setState((prevState) => prevState.filter((item) => item.id !== id));
+  };
+
+  const openEditModal = (id) => {
+    setEditingItem(state.find((item) => item.id === id));
+    handleOpenModal();
+  };
+
+  const editItem = (values) => {
+    const editedItem = { id: editingItem.id, ...values };
+    const newState = state.map((item) => (item.id === editedItem.id ? editedItem : item));
+    setState(newState);
+    handleCloseModal();
   };
 
   const getTotalValue = () => {
@@ -108,8 +120,12 @@ const Main = () => {
 
   return (
     <Wrapper>
-      <Modal isOpen={isOpen} setIsOpen={setIsOpen} />
-      <Form setIsOpen={setIsOpen} onSubmit={addItem} />
+      {isOpen ? (
+        <Modal title="Edit item" isOpen={isOpen} setIsOpen={setModalState}>
+          <Form defaultValues={editingItem} onSubmit={editItem} />
+        </Modal>
+      ) : null}
+      <Form onSubmit={addItem} />
       <Informations>
         <p>{getTotalValue()}</p>
         <p>Total of all positions: {getPositionsAmount()}</p>
@@ -128,7 +144,7 @@ const Main = () => {
           ))}
         </InformationLists>
       </Informations>
-      <Table data={state} deleteItem={deleteItem} />
+      <Table data={state} deleteItem={deleteItem} editItem={openEditModal} />
     </Wrapper>
   );
 };

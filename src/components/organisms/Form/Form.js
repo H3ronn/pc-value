@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Radio from 'components/atoms/Radio/Radio';
 import Fieldset from 'components/molecules/Fieldset/Fieldset';
 import InputField from 'components/molecules/InputField/InputField';
@@ -21,7 +21,9 @@ const StyledForm = styled.form`
   max-width: 500px;
 `;
 
-const Form = ({ values, onChange, onSubmit }) => {
+// const defaultValues = { category: 'software', currency: 'zloty', description: '123', name: 'dawaswa', price: '1234' };
+
+const Form = ({ defaultValues = {}, onSubmit }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [modalContent, setModalContent] = useState('');
   const { inputCategories } = useCategories();
@@ -32,6 +34,10 @@ const Form = ({ values, onChange, onSubmit }) => {
     reset,
     formState: { errors },
   } = useForm();
+
+  useEffect(() => {
+    console.log(defaultValues);
+  }, [defaultValues]);
 
   const showModal = (content) => {
     setIsOpen(true);
@@ -45,12 +51,12 @@ const Form = ({ values, onChange, onSubmit }) => {
 
   return (
     <>
-      <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
+      <Modal title="Add Category" isOpen={isOpen} setIsOpen={setIsOpen}>
         {modalContent === 'category' ? <CategoriesForm /> : <CurrenciesForm />}
       </Modal>
       <StyledForm autoComplete="off" onSubmit={handleSubmit(handleFormSubmit)}>
         <InputField
-          {...register('name', { required: true })}
+          {...register('name', { required: true, value: defaultValues.name })}
           id="name"
           type="text"
           label="Name"
@@ -58,10 +64,16 @@ const Form = ({ values, onChange, onSubmit }) => {
           error={errors.name ? 'Name is required' : null}
         />
 
-        <InputField {...register('description')} id="description" type="text" label="Description" placeholder="e.g i5 10300f" />
+        <InputField
+          {...register('description', { value: defaultValues.description })}
+          id="description"
+          type="text"
+          label="Description"
+          placeholder="e.g i5 10300f"
+        />
 
         <Select
-          {...register('category', { required: true })}
+          {...register('category', { required: true, value: defaultValues.category })}
           id="category"
           label="Choose category"
           error={errors.category ? 'Select category or add your own' : null}
@@ -69,11 +81,13 @@ const Form = ({ values, onChange, onSubmit }) => {
           <option value="" disabled hidden>
             Categories
           </option>
-          {inputCategories.map((category) => (
-            <option key={category} value={category}>
-              {category}
-            </option>
-          ))}
+          {inputCategories.map((category) => {
+            return (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            );
+          })}
         </Select>
 
         <Button type="button" onClick={() => showModal('category')} rounded color="dark">
@@ -81,7 +95,7 @@ const Form = ({ values, onChange, onSubmit }) => {
         </Button>
 
         <InputField
-          {...register('price', { required: true, min: 0 })}
+          {...register('price', { required: true, min: 0, value: defaultValues.price })}
           id="price"
           type="number"
           step="any"
@@ -92,14 +106,14 @@ const Form = ({ values, onChange, onSubmit }) => {
 
         <Fieldset legend="Currency" error={errors.currency ? <span>Select currency!</span> : null}>
           {inputCurrencies.map((currency) => (
-            <Radio {...register('currency', { required: true })} label={currency} value={currency} key={currency} />
+            <Radio {...register('currency', { required: true, value: defaultValues.currency })} label={currency} value={currency} key={currency} />
           ))}
         </Fieldset>
         <Button type="button" onClick={() => showModal('currency')} rounded color="dark">
           Add new currency
         </Button>
         <Button $center rounded color="dark">
-          Add item
+          {defaultValues ? 'Save changes' : 'Add item'}
         </Button>
       </StyledForm>
     </>

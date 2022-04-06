@@ -5,11 +5,13 @@ import Label from 'components/atoms/Label/Label';
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  /* align-items: center; */
+  max-width: 500px;
+  margin: 10px auto;
   span {
     text-align: center;
   }
   select {
+    background-color: white;
     border: #a1a1a1 solid 1px;
     font-size: 16px;
     border-radius: 6px;

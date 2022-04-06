@@ -65,7 +65,7 @@ const CategoriesForm = () => {
 
   const deleteCategory = (category) => {
     setCategories((prevCategories) => prevCategories.filter((name) => name !== category));
-  };
+  }; //przenieść do providera
 
   return (
     <>

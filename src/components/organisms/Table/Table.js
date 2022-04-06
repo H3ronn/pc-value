@@ -25,12 +25,13 @@ const StyledTable = styled.table`
 
   td {
     min-width: 150px;
-    max-width: 30vw;
+    max-width: 350px;
+    /* max-width: 30vw; */
     word-break: break-all;
   }
 `;
 
-const Table = ({ data, deleteItem }) => {
+const Table = ({ data, deleteItem, editItem }) => {
   const { allCategories } = useCategories();
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [filteredData, setFilteredData] = useState(data);
@@ -94,7 +95,7 @@ const Table = ({ data, deleteItem }) => {
               <td>{currency}</td>
               <td>
                 <Button onClick={() => deleteItem(id)}>Delete</Button>
-                <Button onClick={() => console.log('edit soon')}>Edit</Button>
+                <Button onClick={() => editItem(id)}>Edit</Button>
               </td>
             </tr>
           ))}
