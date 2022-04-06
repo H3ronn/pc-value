@@ -6,7 +6,7 @@ import { getRandomId } from 'helpers/getRandomId';
 import { useLocalStorage } from 'hooks/useLocalStorage';
 import { formatFloat } from 'helpers/formatFloat';
 import Modal from 'components/organisms/Modal/Modal';
-import { useCategory } from 'hooks/useCategory';
+import { useCategories } from 'hooks/useCategories';
 import { MDBListGroup, MDBListGroupItem } from 'mdb-react-ui-kit';
 
 const Wrapper = styled.div`
@@ -33,7 +33,7 @@ const InformationLists = styled.div`
 const Main = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [state, setState] = useLocalStorage('state', []);
-  const { categories } = useCategory();
+  const { categories } = useCategories();
 
   const addItem = (values) => {
     setState((prevState) => [...prevState, { ...values, id: getRandomId() }]);
@@ -71,12 +71,7 @@ const Main = () => {
       return acc;
     }, {});
 
-    // version with 0 values
-    // const allCategories = state.reduce((acc, item) => {
-    //   if (acc.includes(item.category)) return acc;
-    //   return [...acc, item.category];
-    // }, categories);
-
+    // version with empty values
     // let result = {};
     // allCategories.forEach((category) => {
     //   result[category] = state.reduce(

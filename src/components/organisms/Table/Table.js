@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Button from 'components/atoms/Button/Button';
 import styled from 'styled-components';
+import Select from 'components/molecules/Select/Select';
+import { useCategories } from 'hooks/useCategories';
 
 const TableWrapper = styled.div`
   overflow-x: auto;
+  padding-bottom: 300px;
 `;
 
 const StyledTable = styled.table`
@@ -28,8 +31,39 @@ const StyledTable = styled.table`
 `;
 
 const Table = ({ data, deleteItem }) => {
+  const { allCategories } = useCategories();
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [filteredData, setFilteredData] = useState(data);
+
+  const filterByCategory = useCallback(
+    (category) => {
+      setFilteredData(data);
+      if (category !== 'all') setFilteredData(data.filter((item) => item.category === category));
+    },
+    [data]
+  );
+
+  useEffect(() => {
+    filterByCategory(selectedCategory);
+  }, [selectedCategory, filterByCategory]);
+
+  useEffect(() => {
+    //if we delete selected category it was failing
+    if (!allCategories.includes(selectedCategory)) {
+      setSelectedCategory('all');
+    }
+  }, [allCategories, selectedCategory]);
+
   return (
     <TableWrapper>
+      <Select name="filter" id="filter" label="Filter by category" onChange={(e) => setSelectedCategory(e.target.value)}>
+        <option value="all">All</option>
+        {allCategories.map((category) => (
+          <option value={category} key={category}>
+            {category}
+          </option>
+        ))}
+      </Select>
       <StyledTable>
         <thead>
           <tr>
@@ -50,7 +84,7 @@ const Table = ({ data, deleteItem }) => {
                 ))}
               </tr>
             ))} */}
-          {data.map(({ id, name, description, category, price, currency }, index) => (
+          {filteredData.map(({ id, name, description, category, price, currency }, index) => (
             <tr key={id}>
               <th>{index + 1}</th>
               <td>{name}</td>

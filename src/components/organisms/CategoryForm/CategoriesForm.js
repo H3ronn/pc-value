@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
-import { useCategory } from 'hooks/useCategory';
+import { useCategories } from 'hooks/useCategories';
 import InputField from 'components/molecules/InputField/InputField';
 import Button from 'components/atoms/Button/Button';
 import { MDBIcon } from 'mdb-react-ui-kit';
@@ -38,8 +38,8 @@ const CategoryButton = styled.button`
   }
 `;
 
-const CategoryForm = () => {
-  const { categories, setCategories } = useCategory();
+const CategoriesForm = () => {
+  const { inputCategories, setCategories } = useCategories();
   const {
     register,
     handleSubmit,
@@ -53,7 +53,7 @@ const CategoryForm = () => {
     setError(false);
 
     const newCategory = getValues('newCategory');
-    const categoryExist = !!categories.find((category) => category === newCategory);
+    const categoryExist = !!inputCategories.find((category) => category === newCategory);
     if (categoryExist) {
       setError(true);
       return;
@@ -70,7 +70,7 @@ const CategoryForm = () => {
   return (
     <>
       <div>
-        {categories.map((category) => (
+        {inputCategories.map((category) => (
           <CategoryItem key={category}>
             {category}{' '}
             <CategoryButton onClick={() => deleteCategory(category)}>
@@ -89,4 +89,4 @@ const CategoryForm = () => {
   );
 };
 
-export default CategoryForm;
+export default CategoriesForm;

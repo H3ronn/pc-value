@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import Radio from 'components/atoms/Radio/Radio';
 import Fieldset from 'components/molecules/Fieldset/Fieldset';
 import InputField from 'components/molecules/InputField/InputField';
-import SelectField from 'components/molecules/Select/Select';
-import { useCategory } from 'hooks/useCategory';
+import Select from 'components/molecules/Select/Select';
+import { useCategories } from 'hooks/useCategories';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 import Modal from 'components/organisms/Modal/Modal';
-import CategoryForm from '../CategoryForm/CategoryForm';
+import CategoryForm from '../CategoryForm/CategoriesForm';
 import Button from 'components/atoms/Button/Button';
 
 const StyledForm = styled.form`
@@ -21,7 +21,7 @@ const StyledForm = styled.form`
 
 const Form = ({ values, onChange, onSubmit }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { categories } = useCategory();
+  const { inputCategories } = useCategories();
   const {
     register,
     handleSubmit,
@@ -51,7 +51,7 @@ const Form = ({ values, onChange, onSubmit }) => {
 
         <InputField {...register('description')} id="description" type="text" label="Description" placeholder="e.g i5 10300f" />
 
-        <SelectField
+        <Select
           {...register('category', { required: true })}
           id="category"
           label="Choose category"
@@ -60,12 +60,12 @@ const Form = ({ values, onChange, onSubmit }) => {
           <option value="" disabled hidden>
             Categories
           </option>
-          {categories.map((category) => (
+          {inputCategories.map((category) => (
             <option key={category} value={category}>
               {category}
             </option>
           ))}
-        </SelectField>
+        </Select>
 
         <Button type="button" onClick={() => setIsOpen(true)} rounded color="dark">
           Add new category
