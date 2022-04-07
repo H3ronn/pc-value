@@ -3,6 +3,7 @@ import Button from 'components/atoms/Button/Button';
 import styled from 'styled-components';
 import Select from 'components/molecules/Select/Select';
 import { useCategories } from 'hooks/useCategories';
+import TableHead from './TableHead';
 
 const TableWrapper = styled.div`
   overflow-x: auto;
@@ -23,18 +24,65 @@ const StyledTable = styled.table`
     padding: 12px;
   }
 
+  th {
+    cursor: pointer;
+    &:last-of-type {
+      cursor: default;
+      /* opacity: 0; */
+    }
+  }
+
   td {
     min-width: 150px;
     max-width: 350px;
     /* max-width: 30vw; */
     word-break: break-all;
   }
+
+  tr {
+    &:hover {
+      background-color: #dee2e6;
+    }
+  }
+`;
+
+const FilterSelect = styled(Select)`
+  max-width: 500px;
+  margin: 10px auto;
 `;
 
 const Table = ({ data, deleteItem, editItem }) => {
   const { allCategories } = useCategories();
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [filteredData, setFilteredData] = useState(data);
+  const [isReversed, setIsReversed] = useState(false);
+
+  const columns = [
+    { name: 'ln', label: 'Ln', sortable: true },
+    { name: 'name', label: 'Name', sortable: true },
+    { name: 'description', label: 'Description', sortable: true },
+    { name: 'category', label: 'Category', sortable: true },
+    { name: 'price', label: 'Price', sortable: true },
+    { name: 'currency', label: 'Currency', sortable: true },
+    { name: '', label: '', sortable: false },
+  ];
+
+  const handleSorting = (sortField, sortOrder) => {
+    setIsReversed(false);
+    if (sortField === 'ln') {
+      setFilteredData(data);
+      setIsReversed((prev) => (sortOrder === 'desc' ? true : false));
+      return;
+    }
+
+    const sorted = [...filteredData].sort(
+      (next, curr) =>
+        next[sortField].localeCompare(curr[sortField], 'en', {
+          numeric: true,
+        }) * (sortOrder === 'asc' ? 1 : -1)
+    );
+    setFilteredData(sorted);
+  };
 
   const filterByCategory = useCallback(
     (category) => {
@@ -43,6 +91,23 @@ const Table = ({ data, deleteItem, editItem }) => {
     },
     [data]
   );
+
+  const printFilteredData = () => {
+    return filteredData.map(({ id, name, description, category, price, currency }, index) => (
+      <tr key={id}>
+        <th>{index + 1}</th>
+        <td>{name}</td>
+        <td>{description || '---'}</td>
+        <td>{category}</td>
+        <td>{price}</td>
+        <td>{currency}</td>
+        <td>
+          <Button onClick={() => deleteItem(id)}>Delete</Button>
+          <Button onClick={() => editItem(id)}>Edit</Button>
+        </td>
+      </tr>
+    ));
+  };
 
   useEffect(() => {
     filterByCategory(selectedCategory);
@@ -57,49 +122,17 @@ const Table = ({ data, deleteItem, editItem }) => {
 
   return (
     <TableWrapper>
-      <Select name="filter" id="filter" label="Filter by category" onChange={(e) => setSelectedCategory(e.target.value)}>
+      <FilterSelect name="filter" id="filter" label="Filter by category" onChange={(e) => setSelectedCategory(e.target.value)}>
         <option value="all">All</option>
         {allCategories.map((category) => (
           <option value={category} key={category}>
             {category}
           </option>
         ))}
-      </Select>
+      </FilterSelect>
       <StyledTable>
-        <thead>
-          <tr>
-            <th>Ln</th>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Category</th>
-            <th>Price</th>
-            <th>Currency</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {/* {state.map((row) => (
-              <tr>
-                {Object.entries(row).map((el) => (
-                  <td>{el[1]}</td>
-                ))}
-              </tr>
-            ))} */}
-          {filteredData.map(({ id, name, description, category, price, currency }, index) => (
-            <tr key={id}>
-              <th>{index + 1}</th>
-              <td>{name}</td>
-              <td>{description}</td>
-              <td>{category}</td>
-              <td>{price}</td>
-              <td>{currency}</td>
-              <td>
-                <Button onClick={() => deleteItem(id)}>Delete</Button>
-                <Button onClick={() => editItem(id)}>Edit</Button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
+        <TableHead columns={columns} handleSorting={handleSorting} />
+        <tbody>{isReversed ? printFilteredData().reverse() : printFilteredData()}</tbody>
       </StyledTable>
     </TableWrapper>
   );

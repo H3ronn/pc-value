@@ -35,10 +35,6 @@ const Form = ({ defaultValues = {}, onSubmit }) => {
     formState: { errors },
   } = useForm();
 
-  useEffect(() => {
-    console.log(defaultValues);
-  }, [defaultValues]);
-
   const showModal = (content) => {
     setIsOpen(true);
     setModalContent(content);
