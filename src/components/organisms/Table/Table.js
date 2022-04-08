@@ -4,10 +4,11 @@ import styled from 'styled-components';
 import Select from 'components/molecules/Select/Select';
 import { useCategories } from 'hooks/useCategories';
 import TableHead from './TableHead';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 const TableWrapper = styled.div`
   overflow-x: auto;
-  padding-bottom: 300px;
+  padding-bottom: 100px;
 `;
 
 const StyledTable = styled.table`
@@ -35,14 +36,13 @@ const StyledTable = styled.table`
   td {
     min-width: 150px;
     max-width: 350px;
-    /* max-width: 30vw; */
     word-break: break-all;
   }
+`;
 
-  tr {
-    &:hover {
-      background-color: #dee2e6;
-    }
+const Row = styled.tr`
+  &:hover {
+    background-color: #dee2e6;
   }
 `;
 
@@ -51,21 +51,21 @@ const FilterSelect = styled(Select)`
   margin: 10px auto;
 `;
 
+const columns = [
+  { name: 'ln', label: 'Ln', sortable: true },
+  { name: 'name', label: 'Name', sortable: true },
+  { name: 'description', label: 'Description', sortable: true },
+  { name: 'category', label: 'Category', sortable: true },
+  { name: 'price', label: 'Price', sortable: true },
+  { name: 'currency', label: 'Currency', sortable: true },
+  { name: '', label: '', sortable: false },
+];
+
 const Table = ({ data, deleteItem, editItem }) => {
   const { allCategories } = useCategories();
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [filteredData, setFilteredData] = useState(data);
   const [isReversed, setIsReversed] = useState(false);
-
-  const columns = [
-    { name: 'ln', label: 'Ln', sortable: true },
-    { name: 'name', label: 'Name', sortable: true },
-    { name: 'description', label: 'Description', sortable: true },
-    { name: 'category', label: 'Category', sortable: true },
-    { name: 'price', label: 'Price', sortable: true },
-    { name: 'currency', label: 'Currency', sortable: true },
-    { name: '', label: '', sortable: false },
-  ];
 
   const handleSorting = (sortField, sortOrder) => {
     setIsReversed(false);
@@ -92,21 +92,33 @@ const Table = ({ data, deleteItem, editItem }) => {
     [data]
   );
 
-  const printFilteredData = () => {
+  const printFilteredData = (provided) => {
     return filteredData.map(({ id, name, description, category, price, currency }, index) => (
-      <tr key={id}>
-        <th>{index + 1}</th>
-        <td>{name}</td>
-        <td>{description || '---'}</td>
-        <td>{category}</td>
-        <td>{price}</td>
-        <td>{currency}</td>
-        <td>
-          <Button onClick={() => deleteItem(id)}>Delete</Button>
-          <Button onClick={() => editItem(id)}>Edit</Button>
-        </td>
-      </tr>
+      <Draggable key={id} draggableId={id} index={index}>
+        {(provided) => (
+          <Row key={id} {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
+            <th>{index + 1}</th>
+            <td>{name}</td>
+            <td>{description || '---'}</td>
+            <td>{category}</td>
+            <td>{price}</td>
+            <td>{currency}</td>
+            <td>
+              <Button onClick={() => deleteItem(id)}>Delete</Button>
+              <Button onClick={() => editItem(id)}>Edit</Button>
+            </td>
+          </Row>
+        )}
+      </Draggable>
     ));
+  };
+
+  const handleOnDragEnd = (result) => {
+    const items = Array.from(filteredData);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+
+    setFilteredData(items);
   };
 
   useEffect(() => {
@@ -131,8 +143,17 @@ const Table = ({ data, deleteItem, editItem }) => {
         ))}
       </FilterSelect>
       <StyledTable>
-        <TableHead columns={columns} handleSorting={handleSorting} />
-        <tbody>{isReversed ? printFilteredData().reverse() : printFilteredData()}</tbody>
+        <DragDropContext onDragEnd={handleOnDragEnd}>
+          <TableHead columns={columns} handleSorting={handleSorting} />
+          <Droppable droppableId="rows">
+            {(provided) => (
+              <tbody {...provided.droppableProps} ref={provided.innerRef}>
+                {isReversed ? printFilteredData(provided).reverse() : printFilteredData(provided)}
+                {provided.placeholder}
+              </tbody>
+            )}
+          </Droppable>
+        </DragDropContext>
       </StyledTable>
     </TableWrapper>
   );
