@@ -21,8 +21,6 @@ const StyledForm = styled.form`
   max-width: 500px;
 `;
 
-// const defaultValues = { category: 'software', currency: 'zloty', description: '123', name: 'dawaswa', price: '1234' };
-
 const Form = ({ defaultValues = {}, onSubmit }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [modalContent, setModalContent] = useState('');
@@ -109,7 +107,7 @@ const Form = ({ defaultValues = {}, onSubmit }) => {
           Add new currency
         </Button>
         <Button $center rounded color="dark">
-          {defaultValues ? 'Save changes' : 'Add item'}
+          {defaultValues.name ? 'Save changes' : 'Add item'}
         </Button>
       </StyledForm>
     </>

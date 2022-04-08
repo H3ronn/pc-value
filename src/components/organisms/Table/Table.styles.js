@@ -33,7 +33,7 @@ export const StyledTable = styled.table`
 export const Td = styled.td`
   min-width: ${({ wide }) => (wide ? `350px` : 'fit-content')};
   max-width: 350px;
-  word-break: break-all;
+  word-break: ${({ wide }) => (wide ? `break-all` : 'normal')};
 `;
 
 export const Row = styled.tr`
