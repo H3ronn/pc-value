@@ -8,7 +8,7 @@ import useModal from 'hooks/useModal';
 import useTableData from 'hooks/useTableData';
 
 const App = () => {
-  const { tableData, addItem, deleteItem, editItem, amount, totalValue, categoryInformation } = useTableData();
+  const { tableData, setTableData, addItem, deleteItem, editItem, amount, totalValue, categoryInformation } = useTableData();
   const { isOpen, handleOpenModal, handleCloseModal, setModalState } = useModal(false);
   const [editingItem, setEditingItem] = useState({});
 
@@ -63,7 +63,7 @@ const App = () => {
             ))}
           </InformationLists>
         </Informations>
-        <Table data={tableData} deleteItem={deleteItem} editItem={openEditModal} />
+        <Table data={tableData} updateData={setTableData} deleteItem={deleteItem} editItem={openEditModal} />
       </Wrapper>
     </>
   );

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { TableWrapper, StyledTable, Td, Row, FilterSelect, ButtonsCell } from './Table.styles';
+import { TableWrapper, StyledTable, Td, Row, FilterSelect, ButtonsCell, DragIcon } from './Table.styles';
 import Button from 'components/atoms/Button/Button';
 import { useCategories } from 'hooks/useCategories';
 import TableHead from './TableHead';
@@ -15,7 +15,7 @@ const columns = [
   { name: '', label: '', sortable: false },
 ];
 
-const Table = ({ data, deleteItem, editItem }) => {
+const Table = ({ data, updateData, deleteItem, editItem }) => {
   const { categories } = useCategories();
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [filteredData, setFilteredData] = useState(data);
@@ -47,30 +47,25 @@ const Table = ({ data, deleteItem, editItem }) => {
   );
 
   const handleOnDragEnd = (result) => {
-    const items = Array.from(filteredData);
+    const items = Array.from(data);
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);
 
-    setFilteredData(items);
+    updateData(items);
   };
 
   useEffect(() => {
     filterByCategory(selectedCategory);
   }, [selectedCategory, filterByCategory]);
 
-  useEffect(() => {
-    //if we delete selected category it was failing
-    if (!categories.includes(selectedCategory)) {
-      setSelectedCategory('all');
-    }
-  }, [categories, selectedCategory]);
-
   const printFilteredData = (provided) => {
     return filteredData.map(({ id, name, description, category, price, currency }, index) => (
       <Draggable key={id} draggableId={id} index={index}>
         {(provided) => (
-          <Row key={id} {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
-            <th>{index + 1} </th>
+          <Row key={id} {...provided.draggableProps} ref={provided.innerRef}>
+            <th>
+              <DragIcon {...provided.dragHandleProps} /> {index + 1}
+            </th>
             <Td wide>{name}</Td>
             <Td wide>{description || '---'}</Td>
             <Td>{category}</Td>

@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import Select from 'components/molecules/Select/Select';
+import { MDBIcon } from 'mdb-react-ui-kit';
 
 export const TableWrapper = styled.div`
   overflow-x: auto;
@@ -56,4 +57,11 @@ export const ButtonsCell = styled.td`
   Button {
     margin: 0 5px;
   }
+`;
+
+export const DragIcon = styled(MDBIcon).attrs(() => ({
+  icon: 'bars',
+  fas: true,
+}))`
+  margin-right: 5px;
 `;
