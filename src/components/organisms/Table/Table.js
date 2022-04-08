@@ -1,55 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { TableWrapper, StyledTable, Td, Row, FilterSelect, ButtonsCell } from './Table.styles';
 import Button from 'components/atoms/Button/Button';
-import styled from 'styled-components';
-import Select from 'components/molecules/Select/Select';
 import { useCategories } from 'hooks/useCategories';
 import TableHead from './TableHead';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-
-const TableWrapper = styled.div`
-  overflow-x: auto;
-  padding-bottom: 100px;
-`;
-
-const StyledTable = styled.table`
-  border-collapse: collapse;
-  max-width: 100vw;
-  margin: 0 auto;
-  thead th {
-    border-bottom: 2px solid #dee2e6;
-  }
-
-  th,
-  td {
-    border-top: 1px solid #dee2e6;
-    padding: 12px;
-  }
-
-  th {
-    cursor: pointer;
-    &:last-of-type {
-      cursor: default;
-      /* opacity: 0; */
-    }
-  }
-
-  td {
-    min-width: 150px;
-    max-width: 350px;
-    word-break: break-all;
-  }
-`;
-
-const Row = styled.tr`
-  &:hover {
-    background-color: #dee2e6;
-  }
-`;
-
-const FilterSelect = styled(Select)`
-  max-width: 500px;
-  margin: 10px auto;
-`;
 
 const columns = [
   { name: 'ln', label: 'Ln', sortable: true },
@@ -92,27 +46,6 @@ const Table = ({ data, deleteItem, editItem }) => {
     [data]
   );
 
-  const printFilteredData = (provided) => {
-    return filteredData.map(({ id, name, description, category, price, currency }, index) => (
-      <Draggable key={id} draggableId={id} index={index}>
-        {(provided) => (
-          <Row key={id} {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
-            <th>{index + 1}</th>
-            <td>{name}</td>
-            <td>{description || '---'}</td>
-            <td>{category}</td>
-            <td>{price}</td>
-            <td>{currency}</td>
-            <td>
-              <Button onClick={() => deleteItem(id)}>Delete</Button>
-              <Button onClick={() => editItem(id)}>Edit</Button>
-            </td>
-          </Row>
-        )}
-      </Draggable>
-    ));
-  };
-
   const handleOnDragEnd = (result) => {
     const items = Array.from(filteredData);
     const [reorderedItem] = items.splice(result.source.index, 1);
@@ -131,6 +64,29 @@ const Table = ({ data, deleteItem, editItem }) => {
       setSelectedCategory('all');
     }
   }, [allCategories, selectedCategory]);
+
+  const printFilteredData = (provided) => {
+    return filteredData.map(({ id, name, description, category, price, currency }, index) => (
+      <Draggable key={id} draggableId={id} index={index}>
+        {(provided) => (
+          <Row key={id} {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
+            <th>{index + 1} </th>
+            <Td wide>{name}</Td>
+            <Td wide>{description || '---'}</Td>
+            <Td>{category}</Td>
+            <Td>{price}</Td>
+            <Td>{currency}</Td>
+            <ButtonsCell>
+              <div>
+                <Button onClick={() => deleteItem(id)}>Delete</Button>
+                <Button onClick={() => editItem(id)}>Edit</Button>
+              </div>
+            </ButtonsCell>
+          </Row>
+        )}
+      </Draggable>
+    ));
+  };
 
   return (
     <TableWrapper>

@@ -10,9 +10,10 @@ import { MDBListGroup, MDBListGroupItem } from 'mdb-react-ui-kit';
 import useModal from 'hooks/useModal';
 
 const Wrapper = styled.div`
-  display: grid;
+  display: flex;
   justify-content: center;
-  gap: 20px;
+  flex-direction: column;
+  /* gap: 20px; */
 
   p {
     text-align: center;
@@ -27,6 +28,7 @@ const Informations = styled.div`
 
 const InformationLists = styled.div`
   display: flex;
+  justify-content: center;
   flex-wrap: wrap;
 `;
 
@@ -119,33 +121,35 @@ const Main = () => {
   };
 
   return (
-    <Wrapper>
+    <>
       {isOpen ? (
         <Modal title="Edit item" isOpen={isOpen} setIsOpen={setModalState}>
           <Form defaultValues={editingItem} onSubmit={editItem} />
         </Modal>
       ) : null}
-      <Form onSubmit={addItem} />
-      <Informations>
-        <p>{getTotalValue()}</p>
-        <p>Total of all positions: {getPositionsAmount()}</p>
-        <InformationLists>
-          {getInformations().map((item) => (
-            <MDBListGroup key={item.category}>
-              <MDBListGroupItem active aria-current="true">
-                {item.category}
-              </MDBListGroupItem>
-              {item.arr.map(({ key, value }) => (
-                <MDBListGroupItem key={key}>
-                  {key}: {value}
+      <Wrapper>
+        <Form onSubmit={addItem} />
+        <Informations>
+          <p>{getTotalValue()}</p>
+          <p>Total of all positions: {getPositionsAmount()}</p>
+          <InformationLists>
+            {getInformations().map((item) => (
+              <MDBListGroup key={item.category}>
+                <MDBListGroupItem active aria-current="true">
+                  {item.category}
                 </MDBListGroupItem>
-              ))}
-            </MDBListGroup>
-          ))}
-        </InformationLists>
-      </Informations>
-      <Table data={state} deleteItem={deleteItem} editItem={openEditModal} />
-    </Wrapper>
+                {item.arr.map(({ key, value }) => (
+                  <MDBListGroupItem key={key}>
+                    {key}: {value}
+                  </MDBListGroupItem>
+                ))}
+              </MDBListGroup>
+            ))}
+          </InformationLists>
+        </Informations>
+        <Table data={state} deleteItem={deleteItem} editItem={openEditModal} />
+      </Wrapper>
+    </>
   );
 };
 
