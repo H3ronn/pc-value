@@ -3,7 +3,13 @@ import { initialCategories } from 'data/initialCategories';
 import { useLocalStorage } from 'hooks/useLocalStorage';
 import useTableData from 'hooks/useTableData';
 
-export const CategoriesContext = createContext({ categories: initialCategories, setCategories: () => {} });
+export const CategoriesContext = createContext({
+  categories: initialCategories,
+  setCategories: () => {},
+  addCategory: () => {},
+  deleteCategory: () => {},
+  error: '',
+});
 
 const CategoriesProvider = ({ children }) => {
   const [categories, setCategories] = useLocalStorage('categories', initialCategories);

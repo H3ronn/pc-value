@@ -2,8 +2,18 @@ import React, { createContext } from 'react';
 import { useLocalStorage } from 'hooks/useLocalStorage';
 import { getRandomId } from 'helpers/getRandomId';
 import { formatFloat } from 'helpers/formatFloat';
+import { useCurrencies } from 'hooks/useCurrencies';
 
-export const TableDataContext = createContext({});
+export const TableDataContext = createContext({
+  tableData: [],
+  setTableData: () => {},
+  addItem: () => {},
+  deleteItem: () => {},
+  editItem: () => {},
+  amount: 0,
+  totalValue: '',
+  categoryInformation: {},
+});
 
 const TableDataProvider = ({ children }) => {
   const [tableData, setTableData] = useLocalStorage('tableData', []);
@@ -29,7 +39,7 @@ const TableDataProvider = ({ children }) => {
       }),
       { zloty: 0, euro: 0, dollar: 0 }
     );
-
+    console.log(total);
     return `Total value: ${total.zloty}zloty, ${total.euro}euro, ${total.dollar}$`;
   };
 

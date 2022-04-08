@@ -3,7 +3,13 @@ import { initialCurrencies } from 'data/initialCurrencies';
 import { useLocalStorage } from 'hooks/useLocalStorage';
 import useTableData from 'hooks/useTableData';
 
-export const CurrenciesContext = createContext({ currencies: initialCurrencies, setCategories: () => {} });
+export const CurrenciesContext = createContext({
+  currencies: initialCurrencies,
+  setCurrencies: () => {},
+  addCurrency: () => {},
+  deleteCurrency: () => {},
+  error: '',
+});
 
 const CurrenciesProvider = ({ children }) => {
   const [currencies, setCurrencies] = useLocalStorage('currencies', initialCurrencies);
