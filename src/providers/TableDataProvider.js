@@ -37,12 +37,18 @@ const TableDataProvider = ({ children }) => {
       return { ...acc, [item.currency]: formatFloat(acc[item.currency] + parseFloat(item.price)) };
     }, {});
 
-    let resultString = 'Total value: ';
+    console.log(total);
+    let resultString = [];
     for (let currency in total) {
-      resultString += `${total[currency]}${currency}, `;
+      resultString.push(
+        <p key={currency}>
+          {total[currency]}
+          {currency}
+        </p>
+      );
     }
 
-    return resultString.slice(0, -2);
+    return total;
   };
 
   const getCategoryInformations = () => {

@@ -4,7 +4,9 @@ import { MDBIcon } from 'mdb-react-ui-kit';
 
 export const TableWrapper = styled.div`
   overflow-x: auto;
-  padding-bottom: 100px;
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
 `;
 
 export const StyledTable = styled.table`
@@ -46,7 +48,8 @@ export const Row = styled.tr`
 
 export const FilterSelect = styled(Select)`
   max-width: 500px;
-  margin: 10px auto;
+  align-self: center;
+  margin: 10px;
 `;
 
 export const ButtonsCell = styled.td`

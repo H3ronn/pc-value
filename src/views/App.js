@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Wrapper, Informations, InformationLists } from './App.styles';
+import { Wrapper, Informations, InformationLists, Title, ListsSection, ListHeader } from './App.styles';
 import Form from 'components/organisms/Form/Form';
 import Table from 'components/organisms/Table/Table';
 import Modal from 'components/organisms/Modal/Modal';
@@ -36,6 +36,15 @@ const App = () => {
     return result;
   };
 
+  const values = [];
+  for (let currency in totalValue) {
+    values.push(
+      <MDBListGroupItem key={currency}>
+        {totalValue[currency]} {currency}
+      </MDBListGroupItem>
+    );
+  }
+
   return (
     <>
       {isOpen ? (
@@ -44,24 +53,39 @@ const App = () => {
         </Modal>
       ) : null}
       <Wrapper>
+        <Title>Check the value of your computer workstation!</Title>
         <Form onSubmit={addItem} />
         <Informations>
-          <p>{totalValue}</p>
-          <p>Total of all positions: {amount}</p>
-          <InformationLists>
-            {getCategoriesCost().map(({ category, costs }) => (
-              <MDBListGroup key={category}>
+          <hr />
+          <ListsSection>
+            <ListHeader>Added items: {amount}</ListHeader>
+            <InformationLists>
+              <MDBListGroup>
                 <MDBListGroupItem active aria-current="true">
-                  {category}
+                  Total value
                 </MDBListGroupItem>
-                {costs.map(({ name, value }) => (
-                  <MDBListGroupItem key={name}>
-                    {name}: {value}
-                  </MDBListGroupItem>
-                ))}
+                {values}
               </MDBListGroup>
-            ))}
-          </InformationLists>
+            </InformationLists>
+          </ListsSection>
+
+          <ListsSection>
+            <ListHeader>Value of individual categories</ListHeader>
+            <InformationLists>
+              {getCategoriesCost().map(({ category, costs }) => (
+                <MDBListGroup key={category}>
+                  <MDBListGroupItem active aria-current="true">
+                    {category}
+                  </MDBListGroupItem>
+                  {costs.map(({ name, value }) => (
+                    <MDBListGroupItem key={name}>
+                      {name}: {value}
+                    </MDBListGroupItem>
+                  ))}
+                </MDBListGroup>
+              ))}
+            </InformationLists>
+          </ListsSection>
         </Informations>
         <Table data={tableData} updateData={setTableData} deleteItem={deleteItem} editItem={openEditModal} />
       </Wrapper>

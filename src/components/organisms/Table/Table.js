@@ -40,8 +40,8 @@ const Table = ({ data, updateData, deleteItem, editItem }) => {
 
   const filterByCategory = useCallback(
     (category) => {
-      setFilteredData(data);
-      if (category !== 'all') setFilteredData(data.filter((item) => item.category === category));
+      setFilteredData(data.filter((item) => item.category === category));
+      if (category === 'all') setFilteredData(data);
     },
     [data]
   );
@@ -55,8 +55,20 @@ const Table = ({ data, updateData, deleteItem, editItem }) => {
   };
 
   useEffect(() => {
+    console.log(selectedCategory);
     filterByCategory(selectedCategory);
-  }, [selectedCategory, filterByCategory]);
+  }, [selectedCategory, filterByCategory, data]);
+
+  // useEffect(() => {
+  //   handleSorting(sortedBy, order);
+  // }, [filteredData]);
+
+  useEffect(() => {
+    // disable filter when we delete category
+    if (!categories.some((category) => category === selectedCategory)) {
+      filterByCategory('all');
+    }
+  }, [categories, filterByCategory, selectedCategory]);
 
   const printFilteredData = (provided) => {
     return filteredData.map(({ id, name, description, category, price, currency }, index) => (
@@ -84,8 +96,8 @@ const Table = ({ data, updateData, deleteItem, editItem }) => {
   };
 
   return (
-    <TableWrapper>
-      <FilterSelect name="filter" id="filter" label="Filter by category" onChange={(e) => setSelectedCategory(e.target.value)}>
+    <>
+      <FilterSelect name="filter" id="filter" defaultValue="all" label="Filter by category" onChange={(e) => setSelectedCategory(e.target.value)}>
         <option value="all">All</option>
         {categories.map((category) => (
           <option value={category} key={category}>
@@ -93,20 +105,22 @@ const Table = ({ data, updateData, deleteItem, editItem }) => {
           </option>
         ))}
       </FilterSelect>
-      <StyledTable>
-        <DragDropContext onDragEnd={handleOnDragEnd}>
-          <TableHead columns={columns} handleSorting={handleSorting} />
-          <Droppable droppableId="rows">
-            {(provided) => (
-              <tbody {...provided.droppableProps} ref={provided.innerRef}>
-                {isReversed ? printFilteredData(provided).reverse() : printFilteredData(provided)}
-                {provided.placeholder}
-              </tbody>
-            )}
-          </Droppable>
-        </DragDropContext>
-      </StyledTable>
-    </TableWrapper>
+      <TableWrapper>
+        <StyledTable>
+          <DragDropContext onDragEnd={handleOnDragEnd}>
+            <TableHead columns={columns} handleSorting={handleSorting} />
+            <Droppable droppableId="rows">
+              {(provided) => (
+                <tbody {...provided.droppableProps} ref={provided.innerRef}>
+                  {isReversed ? printFilteredData(provided).reverse() : printFilteredData(provided)}
+                  {provided.placeholder}
+                </tbody>
+              )}
+            </Droppable>
+          </DragDropContext>
+        </StyledTable>
+      </TableWrapper>
+    </>
   );
 };
 
