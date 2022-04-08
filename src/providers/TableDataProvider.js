@@ -32,15 +32,17 @@ const TableDataProvider = ({ children }) => {
   };
 
   const getTotalValue = () => {
-    const total = tableData.reduce(
-      (acc, item) => ({
-        ...acc,
-        [item.currency]: formatFloat(acc[item.currency] + parseFloat(item.price)),
-      }),
-      { zloty: 0, euro: 0, dollar: 0 }
-    );
-    console.log(total);
-    return `Total value: ${total.zloty}zloty, ${total.euro}euro, ${total.dollar}$`;
+    const total = tableData.reduce((acc, item) => {
+      if (!acc[item.currency]) acc[item.currency] = 0;
+      return { ...acc, [item.currency]: formatFloat(acc[item.currency] + parseFloat(item.price)) };
+    }, {});
+
+    let resultString = 'Total value: ';
+    for (let currency in total) {
+      resultString += `${total[currency]}${currency}, `;
+    }
+
+    return resultString.slice(0, -2);
   };
 
   const getCategoryInformations = () => {
