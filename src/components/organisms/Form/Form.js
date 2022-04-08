@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import styled from 'styled-components';
 import Radio from 'components/atoms/Radio/Radio';
 import Fieldset from 'components/molecules/Fieldset/Fieldset';
 import InputField from 'components/molecules/InputField/InputField';
 import Select from 'components/molecules/Select/Select';
 import { useCategories } from 'hooks/useCategories';
 import { useForm } from 'react-hook-form';
-import styled from 'styled-components';
 import Modal from 'components/organisms/Modal/Modal';
 import CategoriesForm from '../CategoriesForm/CategoriesForm';
 import Button from 'components/atoms/Button/Button';
@@ -25,7 +25,7 @@ const Form = ({ defaultValues = {}, onSubmit }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [modalContent, setModalContent] = useState('');
   const { categories } = useCategories();
-  const { inputCurrencies } = useCurrencies();
+  const { currencies } = useCurrencies();
   const {
     register,
     handleSubmit,
@@ -99,7 +99,7 @@ const Form = ({ defaultValues = {}, onSubmit }) => {
         />
 
         <Fieldset legend="Currency" error={errors.currency ? <span>Select currency!</span> : null}>
-          {inputCurrencies.map((currency) => (
+          {currencies.map((currency) => (
             <Radio {...register('currency', { required: true, value: defaultValues.currency })} label={currency} value={currency} key={currency} />
           ))}
         </Fieldset>

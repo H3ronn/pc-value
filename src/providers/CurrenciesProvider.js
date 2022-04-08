@@ -1,28 +1,40 @@
-import React, { createContext, useCallback, useEffect, useState } from 'react';
+import React, { createContext, useState } from 'react';
 import { initialCurrencies } from 'data/initialCurrencies';
 import { useLocalStorage } from 'hooks/useLocalStorage';
+import useTableData from 'hooks/useTableData';
 
-export const CurrenciesContext = createContext({ inputCurrencies: initialCurrencies, allCurrencies: [], setCategories: () => {} });
+export const CurrenciesContext = createContext({ currencies: initialCurrencies, setCategories: () => {} });
 
 const CurrenciesProvider = ({ children }) => {
-  const [inputCurrencies, setCurrencies] = useLocalStorage('currencies', initialCurrencies);
-  const [allCurrencies, setAllCurrencies] = useState([]);
-  const [state] = useLocalStorage('state');
+  const [currencies, setCurrencies] = useLocalStorage('currencies', initialCurrencies);
+  const { tableData } = useTableData();
+  const [error, setError] = useState('');
 
-  const getAllCurrencies = useCallback(
-    () =>
-      state.reduce((acc, item) => {
-        if (acc.includes(item.category)) return acc;
-        return [...acc, item.category];
-      }, inputCurrencies),
-    [state, inputCurrencies]
+  const addCurrency = (newCurrency) => {
+    const currencyExist = currencies.some((currency) => currency === newCurrency);
+    if (currencyExist) {
+      return;
+    }
+
+    setCurrencies((prev) => [...prev, newCurrency]);
+    return true;
+  };
+
+  const deleteCurrency = (currency) => {
+    const isExist = tableData.some((el) => el.currency === currency);
+    if (isExist) {
+      setError('Before you delete this currency you have to delete items with this currency!');
+      setTimeout(() => setError(''), 3000);
+      return;
+    } else {
+      setError('');
+      setCurrencies((prevCategories) => prevCategories.filter((name) => name !== currency));
+    }
+  };
+
+  return (
+    <CurrenciesContext.Provider value={{ currencies, setCurrencies, addCurrency, deleteCurrency, error }}>{children}</CurrenciesContext.Provider>
   );
-
-  useEffect(() => {
-    setAllCurrencies(getAllCurrencies());
-  }, [state, getAllCurrencies]);
-
-  return <CurrenciesContext.Provider value={{ inputCurrencies, allCurrencies, setCurrencies }}>{children}</CurrenciesContext.Provider>;
 };
 
 export default CurrenciesProvider;
