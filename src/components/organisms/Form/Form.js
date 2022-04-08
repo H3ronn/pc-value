@@ -24,7 +24,7 @@ const StyledForm = styled.form`
 const Form = ({ defaultValues = {}, onSubmit }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [modalContent, setModalContent] = useState('');
-  const { inputCategories } = useCategories();
+  const { categories } = useCategories();
   const { inputCurrencies } = useCurrencies();
   const {
     register,
@@ -75,7 +75,7 @@ const Form = ({ defaultValues = {}, onSubmit }) => {
           <option value="" disabled hidden>
             Categories
           </option>
-          {inputCategories.map((category) => {
+          {categories.map((category) => {
             return (
               <option key={category} value={category}>
                 {category}

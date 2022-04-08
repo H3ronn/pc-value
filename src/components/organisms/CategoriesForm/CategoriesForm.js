@@ -39,7 +39,7 @@ const CategoryButton = styled.button`
 `;
 
 const CategoriesForm = () => {
-  const { inputCategories, setCategories } = useCategories();
+  const { categories, addCategory, deleteCategory, error: categoriesError } = useCategories();
   const {
     register,
     handleSubmit,
@@ -49,37 +49,31 @@ const CategoriesForm = () => {
   } = useForm();
   const [error, setError] = useState(false);
 
-  const addCategory = () => {
+  const handleAddCategory = () => {
     setError(false);
 
-    const newCategory = getValues('newCategory');
-    const categoryExist = !!inputCategories.find((category) => category === newCategory);
-    if (categoryExist) {
+    const isAdded = addCategory(getValues('newCategory'));
+    if (!isAdded) {
       setError(true);
-      return;
     }
 
-    setCategories((prev) => [...prev, newCategory]);
     reset();
   };
-
-  const deleteCategory = (category) => {
-    setCategories((prevCategories) => prevCategories.filter((name) => name !== category));
-  }; //przenieść do providera
 
   return (
     <>
       <div>
-        {inputCategories.map((category) => (
+        {categories.map((category) => (
           <CategoryItem key={category}>
-            {category}{' '}
+            {category}
             <CategoryButton onClick={() => deleteCategory(category)}>
               <MDBIcon far icon="trash-alt" />
             </CategoryButton>
           </CategoryItem>
         ))}
+        {categoriesError ? <p>{categoriesError}</p> : null}
       </div>
-      <StyledForm autoComplete="off" onSubmit={handleSubmit(addCategory)}>
+      <StyledForm autoComplete="off" onSubmit={handleSubmit(handleAddCategory)}>
         <InputField {...register('newCategory', { required: true, maxLength: 20 })} label="Category name" id="addCategory" type="text" />
         <Button>Add category</Button>
         {errors.newCategory ? <span>Minimum 1 letter, maximum length of the category: 20</span> : null}

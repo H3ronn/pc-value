@@ -16,7 +16,7 @@ const columns = [
 ];
 
 const Table = ({ data, deleteItem, editItem }) => {
-  const { allCategories } = useCategories();
+  const { categories } = useCategories();
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [filteredData, setFilteredData] = useState(data);
   const [isReversed, setIsReversed] = useState(false);
@@ -60,10 +60,10 @@ const Table = ({ data, deleteItem, editItem }) => {
 
   useEffect(() => {
     //if we delete selected category it was failing
-    if (!allCategories.includes(selectedCategory)) {
+    if (!categories.includes(selectedCategory)) {
       setSelectedCategory('all');
     }
-  }, [allCategories, selectedCategory]);
+  }, [categories, selectedCategory]);
 
   const printFilteredData = (provided) => {
     return filteredData.map(({ id, name, description, category, price, currency }, index) => (
@@ -92,7 +92,7 @@ const Table = ({ data, deleteItem, editItem }) => {
     <TableWrapper>
       <FilterSelect name="filter" id="filter" label="Filter by category" onChange={(e) => setSelectedCategory(e.target.value)}>
         <option value="all">All</option>
-        {allCategories.map((category) => (
+        {categories.map((category) => (
           <option value={category} key={category}>
             {category}
           </option>
