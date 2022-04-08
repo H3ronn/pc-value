@@ -23,6 +23,7 @@ export const StyledTable = styled.table`
   }
 
   th {
+    white-space: nowrap;
     cursor: pointer;
     &:last-of-type {
       cursor: default;

@@ -19,8 +19,10 @@ const TableHead = ({ columns, handleSorting }) => {
         {columns.map(({ label, name, sortable }) => {
           return (
             <TableHeader key={name} onClick={sortable ? () => handleSortingChange(name) : null}>
-              <span>{label}</span>
-              {name === sortField ? <ArrowsIcon $rotate={order !== 'asc'} className="fas fa-angle-double-down"></ArrowsIcon> : null}
+              <span>
+                {label}
+                {name === sortField ? <ArrowsIcon $rotate={order !== 'asc'} className="fas fa-angle-double-down"></ArrowsIcon> : null}
+              </span>
             </TableHeader>
           );
         })}

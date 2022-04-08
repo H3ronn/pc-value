@@ -5,6 +5,9 @@ export const TableHeader = styled.th`
     opacity: 0;
   }
   min-width: 60px;
+  span {
+    white-space: nowrap;
+  }
 `;
 
 export const ArrowsIcon = styled.i`
