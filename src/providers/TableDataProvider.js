@@ -37,7 +37,6 @@ const TableDataProvider = ({ children }) => {
       return { ...acc, [item.currency]: formatFloat(acc[item.currency] + parseFloat(item.price)) };
     }, {});
 
-    console.log(total);
     let resultString = [];
     for (let currency in total) {
       resultString.push(

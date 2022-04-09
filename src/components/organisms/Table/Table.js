@@ -17,34 +17,76 @@ const columns = [
 
 const Table = ({ data, updateData, deleteItem, editItem }) => {
   const { categories } = useCategories();
-  const [selectedCategory, setSelectedCategory] = useState('all');
   const [filteredData, setFilteredData] = useState(data);
+  const [selectedCategory, setSelectedCategory] = useState('all');
   const [isReversed, setIsReversed] = useState(false);
+  const [sortField, setSortField] = useState('ln');
+  const [order, setOrder] = useState('asc');
 
-  const handleSorting = (sortField, sortOrder) => {
-    setIsReversed(false);
-    if (sortField === 'ln') {
+  const handleSorting = (newSortField) => {
+    setSortField(newSortField);
+    const newOrder = newSortField === sortField && order === 'asc' ? 'desc' : 'asc';
+    setOrder(newOrder);
+
+    // setIsReversed(false);
+    if (newSortField === 'ln') {
       setFilteredData(data);
-      setIsReversed((prev) => (sortOrder === 'desc' ? true : false));
+      setIsReversed((prev) => (newOrder === 'desc' ? true : false));
       return;
     }
 
     const sorted = [...filteredData].sort(
       (next, curr) =>
-        next[sortField].localeCompare(curr[sortField], 'en', {
+        next[newSortField].localeCompare(curr[newSortField], 'en', {
           numeric: true,
-        }) * (sortOrder === 'asc' ? 1 : -1)
+        }) * (newOrder === 'asc' ? 1 : -1)
     );
     setFilteredData(sorted);
   };
+  const getSortedData = useCallback(
+    (tableData) => {
+      setIsReversed(false);
+      if (sortField === 'ln') {
+        setIsReversed((prev) => (order === 'desc' ? true : false));
+        return tableData;
+      }
 
-  const filterByCategory = useCallback(
+      const sorted = [...tableData].sort(
+        (next, curr) =>
+          next[sortField].localeCompare(curr[sortField], 'en', {
+            numeric: true,
+          }) * (order === 'asc' ? 1 : -1)
+      );
+      return sorted;
+    },
+    [order, sortField]
+  );
+
+  const getFilteredData = useCallback(
     (category) => {
-      setFilteredData(data.filter((item) => item.category === category));
-      if (category === 'all') setFilteredData(data);
+      if (category === 'all') return data;
+      console.log(data.filter((item) => item.category === category));
+      return data.filter((item) => item.category === category);
     },
     [data]
   );
+
+  const sortAndFilterData = useCallback(() => {
+    const afterFilter = getFilteredData(selectedCategory);
+    const afterSort = getSortedData(afterFilter);
+    setFilteredData(afterSort);
+  }, [getFilteredData, getSortedData, selectedCategory]);
+
+  useEffect(() => {
+    sortAndFilterData();
+  }, [selectedCategory, sortAndFilterData, data]);
+
+  useEffect(() => {
+    // disable filter when we delete selected category
+    if (!categories.some((category) => category === selectedCategory)) {
+      setSelectedCategory('all');
+    }
+  }, [categories, getFilteredData, selectedCategory]);
 
   const handleOnDragEnd = (result) => {
     const items = Array.from(data);
@@ -53,22 +95,6 @@ const Table = ({ data, updateData, deleteItem, editItem }) => {
 
     updateData(items);
   };
-
-  useEffect(() => {
-    console.log(selectedCategory);
-    filterByCategory(selectedCategory);
-  }, [selectedCategory, filterByCategory, data]);
-
-  // useEffect(() => {
-  //   handleSorting(sortedBy, order);
-  // }, [filteredData]);
-
-  useEffect(() => {
-    // disable filter when we delete category
-    if (!categories.some((category) => category === selectedCategory)) {
-      filterByCategory('all');
-    }
-  }, [categories, filterByCategory, selectedCategory]);
 
   const printFilteredData = (provided) => {
     return filteredData.map(({ id, name, description, category, price, currency }, index) => (
@@ -108,7 +134,7 @@ const Table = ({ data, updateData, deleteItem, editItem }) => {
       <TableWrapper>
         <StyledTable>
           <DragDropContext onDragEnd={handleOnDragEnd}>
-            <TableHead columns={columns} handleSorting={handleSorting} />
+            <TableHead columns={columns} handleSorting={handleSorting} sortField={sortField} order={order} />
             <Droppable droppableId="rows">
               {(provided) => (
                 <tbody {...provided.droppableProps} ref={provided.innerRef}>
