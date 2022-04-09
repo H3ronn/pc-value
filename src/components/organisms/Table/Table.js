@@ -4,6 +4,7 @@ import Button from 'components/atoms/Button/Button';
 import { useCategories } from 'hooks/useCategories';
 import TableHead from './TableHead';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import FilterCategories from 'components/molecules/FilterCategories/FilterCategories';
 
 const columns = [
   { name: 'ln', label: 'Ln', sortable: true },
@@ -83,7 +84,7 @@ const Table = ({ data, updateData, deleteItem, editItem }) => {
 
   useEffect(() => {
     // disable filter when we delete selected category
-    if (!categories.some((category) => category === selectedCategory)) {
+    if (!categories.includes(selectedCategory)) {
       setSelectedCategory('all');
     }
   }, [categories, getFilteredData, selectedCategory]);
@@ -123,14 +124,7 @@ const Table = ({ data, updateData, deleteItem, editItem }) => {
 
   return (
     <>
-      <FilterSelect name="filter" id="filter" defaultValue="all" label="Filter by category" onChange={(e) => setSelectedCategory(e.target.value)}>
-        <option value="all">All</option>
-        {categories.map((category) => (
-          <option value={category} key={category}>
-            {category}
-          </option>
-        ))}
-      </FilterSelect>
+      <FilterCategories onChange={setSelectedCategory} />
       <TableWrapper>
         <StyledTable>
           <DragDropContext onDragEnd={handleOnDragEnd}>

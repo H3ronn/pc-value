@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import Select from 'components/molecules/Select/Select';
 import { MDBIcon } from 'mdb-react-ui-kit';
 
 export const TableWrapper = styled.div`
@@ -45,12 +44,6 @@ export const Row = styled.tr`
   &:hover {
     background-color: #dee2e6;
   }
-`;
-
-export const FilterSelect = styled(Select)`
-  max-width: 500px;
-  align-self: center;
-  margin: 10px;
 `;
 
 export const ButtonsCell = styled.td`
