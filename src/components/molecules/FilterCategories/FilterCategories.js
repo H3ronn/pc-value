@@ -1,13 +1,6 @@
 import React from 'react';
 import { useCategories } from 'hooks/useCategories';
-import styled from 'styled-components';
-import Select from '../Select/Select';
-
-export const FilterSelect = styled(Select)`
-  max-width: 500px;
-  align-self: center;
-  margin: 10px;
-`;
+import { FilterSelect } from './FilterCategories.styles';
 
 const FilterCategories = ({ onChange }) => {
   const { categories } = useCategories();

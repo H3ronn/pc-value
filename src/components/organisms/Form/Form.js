@@ -1,28 +1,20 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import { useForm } from 'react-hook-form';
+import { useCategories } from 'hooks/useCategories';
+import { useCurrencies } from 'hooks/useCurrencies';
+import { useModal } from 'hooks/useModal';
+import CategoriesForm from '../CategoriesForm/CategoriesForm';
+import CurrenciesForm from '../CurrenciesForm/CurrenciesForm';
 import Radio from 'components/atoms/Radio/Radio';
 import Fieldset from 'components/molecules/Fieldset/Fieldset';
 import InputField from 'components/molecules/InputField/InputField';
 import Select from 'components/molecules/Select/Select';
-import { useCategories } from 'hooks/useCategories';
-import { useForm } from 'react-hook-form';
 import Modal from 'components/organisms/Modal/Modal';
-import CategoriesForm from '../CategoriesForm/CategoriesForm';
 import Button from 'components/atoms/Button/Button';
-import CurrenciesForm from '../CurrenciesForm/CurrenciesForm';
-import { useCurrencies } from 'hooks/useCurrencies';
-
-const StyledForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  margin: 0 auto;
-  width: 50vw;
-  min-width: 200px;
-  max-width: 500px;
-`;
+import { StyledForm } from './Form.styles';
 
 const Form = ({ defaultValues = {}, onSubmit }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const { isOpen, setModalState } = useModal(false);
   const [modalContent, setModalContent] = useState('');
   const { categories } = useCategories();
   const { currencies } = useCurrencies();
@@ -34,7 +26,7 @@ const Form = ({ defaultValues = {}, onSubmit }) => {
   } = useForm();
 
   const showModal = (content) => {
-    setIsOpen(true);
+    setModalState(true);
     setModalContent(content);
   };
 
@@ -45,7 +37,7 @@ const Form = ({ defaultValues = {}, onSubmit }) => {
 
   return (
     <>
-      <Modal title="Add Category" isOpen={isOpen} setIsOpen={setIsOpen}>
+      <Modal size="md" title="Add Category" isOpen={isOpen} setIsOpen={setModalState}>
         {modalContent === 'category' ? <CategoriesForm /> : <CurrenciesForm />}
       </Modal>
       <StyledForm autoComplete="off" onSubmit={handleSubmit(handleFormSubmit)}>

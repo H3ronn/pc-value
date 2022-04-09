@@ -1,16 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
-
-const Wrapper = styled.div`
-  margin: 10px 0;
-`;
-
-const StyledFieldset = styled.fieldset`
-  legend {
-    font-weight: 500;
-    margin-top: 10px;
-  }
-`;
+import { Wrapper, StyledFieldset } from './Fieldset.styles';
 
 const Fieldset = ({ legend, error, children, ...props }) => {
   return (

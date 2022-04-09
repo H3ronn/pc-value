@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { TableWrapper, StyledTable, Td, Row, FilterSelect, ButtonsCell, DragIcon } from './Table.styles';
-import Button from 'components/atoms/Button/Button';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { useCategories } from 'hooks/useCategories';
 import TableHead from './TableHead';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import Button from 'components/atoms/Button/Button';
 import FilterCategories from 'components/molecules/FilterCategories/FilterCategories';
+import { TableWrapper, StyledTable, Td, Row, ButtonsCell, DragIcon } from './Table.styles';
 
 const columns = [
   { name: 'ln', label: 'Ln', sortable: true },
@@ -29,7 +29,6 @@ const Table = ({ data, updateData, deleteItem, editItem }) => {
     const newOrder = newSortField === sortField && order === 'asc' ? 'desc' : 'asc';
     setOrder(newOrder);
 
-    // setIsReversed(false);
     if (newSortField === 'ln') {
       setFilteredData(data);
       setIsReversed((prev) => (newOrder === 'desc' ? true : false));
@@ -66,7 +65,6 @@ const Table = ({ data, updateData, deleteItem, editItem }) => {
   const getFilteredData = useCallback(
     (category) => {
       if (category === 'all') return data;
-      console.log(data.filter((item) => item.category === category));
       return data.filter((item) => item.category === category);
     },
     [data]

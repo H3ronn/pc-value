@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Wrapper, Informations, InformationLists, Title, ListsSection, ListHeader } from './App.styles';
+import { MDBListGroup, MDBListGroupItem } from 'mdb-react-ui-kit';
+import { useModal } from 'hooks/useModal';
+import useTableData from 'hooks/useTableData';
 import Form from 'components/organisms/Form/Form';
 import Table from 'components/organisms/Table/Table';
 import Modal from 'components/organisms/Modal/Modal';
-import { MDBListGroup, MDBListGroupItem } from 'mdb-react-ui-kit';
-import useModal from 'hooks/useModal';
-import useTableData from 'hooks/useTableData';
+import { Wrapper, Informations, InformationLists, Title, ListsSection, ListHeader } from './App.styles';
 
 const App = () => {
   const { tableData, setTableData, addItem, deleteItem, editItem, amount, totalValue, categoryInformations } = useTableData();

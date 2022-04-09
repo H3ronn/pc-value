@@ -1,42 +1,10 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import InputField from 'components/molecules/InputField/InputField';
 import Button from 'components/atoms/Button/Button';
 import { MDBIcon } from 'mdb-react-ui-kit';
 import { useCurrencies } from 'hooks/useCurrencies';
-
-const StyledForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  margin: 0 auto;
-  width: 100%;
-  max-width: 500px;
-
-  label {
-    margin: 0;
-  }
-
-  button {
-    margin-top: 10px;
-  }
-`;
-
-const CurrencyItem = styled.div`
-  display: inline-block;
-  margin: 5px;
-  padding: 5px;
-  border: 1px solid black;
-`;
-
-const CurrencyButton = styled.button`
-  background-color: transparent;
-  border: none;
-  &:hover,
-  &:focus {
-    transform: scale(1.1);
-  }
-`;
+import { StyledForm, CurrencyItem, CurrencyButton } from './CurrenciesForm.styles';
 
 const CurrenciesForm = () => {
   const { currencies, addCurrency, deleteCurrency, error: currenciesError } = useCurrencies();
