@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Wrapper, Informations, InformationLists, Title, ListsSection, ListHeader } from './App.styles';
 import Form from 'components/organisms/Form/Form';
 import Table from 'components/organisms/Table/Table';
@@ -8,9 +8,10 @@ import useModal from 'hooks/useModal';
 import useTableData from 'hooks/useTableData';
 
 const App = () => {
-  const { tableData, setTableData, addItem, deleteItem, editItem, amount, totalValue, categoryInformation } = useTableData();
+  const { tableData, setTableData, addItem, deleteItem, editItem, amount, totalValue, categoryInformations } = useTableData();
   const { isOpen, handleOpenModal, handleCloseModal, setModalState } = useModal(false);
   const [editingItem, setEditingItem] = useState({});
+  const [valueItems, setValueItems] = useState([]);
 
   const openEditModal = (id) => {
     setEditingItem(tableData.find((item) => item.id === id));
@@ -24,7 +25,7 @@ const App = () => {
 
   const getCategoriesCost = () => {
     let result = [];
-    for (const [category, values] of Object.entries(categoryInformation)) {
+    for (const [category, values] of Object.entries(categoryInformations)) {
       let costs = [];
       for (const [key, value] of Object.entries(values)) {
         costs.push({ name: key, value: value });
@@ -36,14 +37,21 @@ const App = () => {
     return result;
   };
 
-  const values = [];
-  for (let currency in totalValue) {
-    values.push(
-      <MDBListGroupItem key={currency}>
-        {totalValue[currency]} {currency}
-      </MDBListGroupItem>
-    );
-  }
+  const getValueItems = useCallback(() => {
+    setValueItems([]);
+    for (let currency in totalValue) {
+      setValueItems((prev) => [
+        ...prev,
+        <MDBListGroupItem key={currency}>
+          {totalValue[currency]} {currency}
+        </MDBListGroupItem>,
+      ]);
+    }
+  }, [totalValue]);
+
+  useEffect(() => {
+    getValueItems();
+  }, [getValueItems]);
 
   return (
     <>
@@ -64,7 +72,7 @@ const App = () => {
                 <MDBListGroupItem active aria-current="true">
                   Total value
                 </MDBListGroupItem>
-                {values}
+                {valueItems}
               </MDBListGroup>
             </InformationLists>
           </ListsSection>

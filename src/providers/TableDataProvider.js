@@ -11,7 +11,7 @@ export const TableDataContext = createContext({
   editItem: () => {},
   amount: 0,
   totalValue: '',
-  categoryInformation: {},
+  categoryInformations: {},
 });
 
 const TableDataProvider = ({ children }) => {
@@ -74,7 +74,7 @@ const TableDataProvider = ({ children }) => {
     editItem,
     amount: tableData.length,
     totalValue: getTotalValue(),
-    categoryInformation: getCategoryInformations(),
+    categoryInformations: getCategoryInformations(),
   };
 
   return <TableDataContext.Provider value={state}>{children}</TableDataContext.Provider>;

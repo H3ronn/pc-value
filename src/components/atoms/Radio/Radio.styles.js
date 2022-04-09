@@ -17,10 +17,12 @@ export const StyledRadio = styled.input`
   transition: box-shadow 0.2s ease-in;
 
   &:focus {
-    outline: 4px red solid;
+    outline: 2px red solid;
   }
 
-  &:checked {
+  &:checked,
+  &:focus {
+    /* outline: 4px red solid; */
     box-shadow: inset 0 0 0 6px #262626;
   }
 `;
