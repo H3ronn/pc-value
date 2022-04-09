@@ -1,15 +1,10 @@
 import React, { forwardRef } from 'react';
-import styled from 'styled-components';
-import Label from 'components/atoms/Label/Label';
-
-const StyledLabel = styled(Label)`
-  display: block;
-`;
+import { StyledLabel, StyledRadio } from './Radio.styles';
 
 const Radio = forwardRef(({ name, type, label, value, ...props }, ref) => {
   return (
     <StyledLabel>
-      <input name={name} type="radio" value={value} ref={ref} {...props} />
+      <StyledRadio name={name} type="radio" value={value} ref={ref} {...props} />
       {label}
     </StyledLabel>
   );

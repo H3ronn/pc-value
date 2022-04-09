@@ -2,7 +2,6 @@ import React, { createContext } from 'react';
 import { useLocalStorage } from 'hooks/useLocalStorage';
 import { getRandomId } from 'helpers/getRandomId';
 import { formatFloat } from 'helpers/formatFloat';
-import { useCurrencies } from 'hooks/useCurrencies';
 
 export const TableDataContext = createContext({
   tableData: [],
