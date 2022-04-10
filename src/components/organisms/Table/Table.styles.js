@@ -5,7 +5,6 @@ export const TableWrapper = styled.div`
   overflow-x: auto;
   display: flex;
   flex-direction: column;
-  /* align-items: center; */
 `;
 
 export const StyledTable = styled.table`

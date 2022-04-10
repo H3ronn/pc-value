@@ -22,7 +22,6 @@ export const StyledRadio = styled.input`
 
   &:checked,
   &:focus {
-    /* outline: 4px red solid; */
     box-shadow: inset 0 0 0 6px #262626;
   }
 `;
